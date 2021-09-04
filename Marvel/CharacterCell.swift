@@ -9,15 +9,16 @@ import UIKit
 
 class CharacterCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    @IBOutlet weak var characterName: UILabel!
+    
+    static let identifier = String(describing: CharacterCell.self)
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    static func nib() -> UINib {
+        return UINib(nibName: self.identifier, bundle: nil)
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        characterName.text = "Name"
+    }
 }
