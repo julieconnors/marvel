@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct CharacterList: Decodable {
+    let results: [Character]
+}
+
+struct Character: Decodable {
+    let name: String
+}
