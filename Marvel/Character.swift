@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct CharacterData: Decodable {
+    let data: CharacterList
+}
+
 struct CharacterList: Decodable {
     let results: [Character]
 }
