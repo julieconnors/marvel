@@ -9,11 +9,27 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let charactersToFetch = "https://gateway.marvel.com:443/v1/public/characters?ts=marvel&apikey=4b52992ce24c7f32bd54bdabc7717050&hash=f173d7550279f53565b7fc469faa5be9"
+    var viewModel: ViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setUpViewModel()
+    }
+    
+    func setUpViewModel() {
+        viewModel =  ViewModel()
+        
+        let completion = { [weak self] in
+            guard let wself = self else { return }
+            
+            wself.loadCharacters()
+        }
+        
+        viewModel.bind(completion: completion)
+    }
+    
+    func loadCharacters() {
+        print("loading characters")
     }
 }
 
