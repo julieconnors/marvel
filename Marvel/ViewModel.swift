@@ -9,7 +9,7 @@ import Foundation
 
 class ViewModel {
     
-    var viewModel: CharacterList? {
+    var characterViewModel: CharacterList? {
         didSet {
             DispatchQueue.main.async {
                 self.updateClosure?()
@@ -24,7 +24,17 @@ class ViewModel {
     }
     
     func fetchCharacters() {
-        print("fetching characters")
+        let characterURL = URL(string: charactersToFetch)
+        
+        guard let url = characterURL else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            guard let data = data else { return }
+            let characterList = try? JSONDecoder().decode(CharacterData.self, from: data)
+            if let characters = characterList?.data {
+                self.characterViewModel = characters
+            }
+        }.resume()
     }
     
     func bind(completion: @escaping () -> Void) {
@@ -32,6 +42,4 @@ class ViewModel {
     }
     
     var updateClosure: (() -> Void)?
-    
-    
 }
