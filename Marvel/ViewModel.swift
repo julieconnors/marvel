@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit.UIImage
 
 class ViewModel {
     
@@ -42,4 +43,30 @@ class ViewModel {
     }
     
     var updateClosure: (() -> Void)?
+    
+    func formatImageStr(character: Character) -> String {
+        var path =  character.thumbnail.path
+        let start =  path.startIndex
+        let nextIndex = path.index(start, offsetBy: 4)
+        path.insert("s", at: nextIndex)
+        let imageStr = path + "." + character.thumbnail.fileType
+        return imageStr
+    }
+    
+    func fetchImages(imageStr: String, completion: @escaping (UIImage?) -> Void) {
+        if let image = ImageCache.shared.findImage(string: imageStr) {
+            completion(image)
+        } else {
+            guard let url = URL(string: imageStr) else { fatalError() }
+            
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                DispatchQueue.main.async {
+                    if let data = data, let image = UIImage(data: data) {
+                    ImageCache.shared.addImage(string: imageStr, image: image)
+                        completion(image)
+                    }
+                }
+            }.resume()
+        }
+    }
 }
