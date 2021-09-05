@@ -17,4 +17,19 @@ struct CharacterList: Decodable {
 
 struct Character: Decodable {
     let name: String
+    let resourceURI: String
+    let thumbnail: Image
+}
+
+struct Comic: Decodable {
+    let collectionURI: String
+}
+
+struct Image: Decodable {
+    enum CodingKeys: String, CodingKey{
+        case fileType = "extension"
+        case path = "path"
+    }
+    let path: String
+    let fileType: String
 }
