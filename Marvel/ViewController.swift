@@ -44,10 +44,31 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let character = self.viewModel.characterViewModel?.results[indexPath.row] else { fatalError() }
+        
         guard let charCell = tableView.dequeueReusableCell(withIdentifier: CharacterCell.identifier) as? CharacterCell else { fatalError() }
         
-        charCell.characterName.text = self.viewModel.characterViewModel?.results[indexPath.row].name
+        charCell.characterName.text = character.name
+        
+        let imageStr = viewModel.formatImageStr(character: character)
+        
+        viewModel.fetchImages(imageStr: imageStr) { image in
+                charCell.characterImageView.image = image
+            }
         
         return charCell
+    }
+}
+
+extension ViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            guard let characters = viewModel.characterViewModel?.results else { fatalError() }
+            let character = characters[indexPath.row]
+            
+            let imageStr = viewModel.formatImageStr(character: character)
+            
+            viewModel.fetchImages(imageStr: imageStr, completion: { _ in })
+        }
     }
 }
