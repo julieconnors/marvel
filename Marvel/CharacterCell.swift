@@ -11,6 +11,8 @@ class CharacterCell: UITableViewCell {
 
     @IBOutlet weak var characterName: UILabel!
     
+    @IBOutlet weak var characterImageView: UIImageView!
+    
     static let identifier = String(describing: CharacterCell.self)
 
     static func nib() -> UINib {
